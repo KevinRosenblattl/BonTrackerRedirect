@@ -16,14 +16,24 @@
     <p>If the app doesn't open automatically, please open it manually.</p>
     
     <script>
-        // Hole Token aus URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const token = urlParams.get('token');
-        const type = urlParams.get('type');
+        // Hole Token aus URL - Supabase verwendet # statt ?
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        const searchParams = new URLSearchParams(window.location.search);
+        
+        // Token kann in hash oder search params sein
+        const token = hashParams.get('access_token') || searchParams.get('token');
+        const type = hashParams.get('type') || searchParams.get('type') || 'recovery';
+        
+        console.log('Token:', token); // Zum Debuggen
+        console.log('Full URL:', window.location.href); // Zum Debuggen
         
         // Versuche App zu öffnen
         if (token) {
-            window.location = `ocrtesting://reset-password?token=${token}&type=${type}`;
+            const deepLink = `ocrtesting://reset-password?token=${token}&type=${type}`;
+            console.log('Opening:', deepLink);
+            window.location = deepLink;
+        } else {
+            document.body.innerHTML = '<h1>❌ No token found</h1><p>URL: ' + window.location.href + '</p>';
         }
         
         // Fallback nach 3 Sekunden
