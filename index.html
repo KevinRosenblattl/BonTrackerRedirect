@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Opening App...</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Opening App...</h1>
+    <p>If the app doesn't open automatically, please open it manually.</p>
+    
+    <script>
+        // Hole Token aus URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        const type = urlParams.get('type');
+        
+        // Versuche App zu öffnen
+        if (token) {
+            window.location = `ocrtesting://reset-password?token=${token}&type=${type}`;
+        }
+        
+        // Fallback nach 3 Sekunden
+        setTimeout(() => {
+            document.body.innerHTML += '<br><p>Please open the app manually to complete password reset.</p>';
+        }, 3000);
+    </script>
+</body>
+</html>
