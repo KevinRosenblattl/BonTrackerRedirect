@@ -22,14 +22,15 @@
         
         // Token kann in hash oder search params sein
         const token = hashParams.get('access_token') || searchParams.get('token');
+        const refreshToken = hashParams.get('refresh_token') || searchParams.get('refresh_token');
         const type = hashParams.get('type') || searchParams.get('type') || 'recovery';
         
-        console.log('Token:', token); // Zum Debuggen
-        console.log('Full URL:', window.location.href); // Zum Debuggen
+        console.log('Access Token:', token);
+        console.log('Refresh Token:', refreshToken);
         
-        // Versuche App zu öffnen
+        // Übergebe BEIDE Token
         if (token) {
-            const deepLink = `ocrtesting://reset-password?token=${token}&type=${type}`;
+            const deepLink = `ocrtesting://reset-password?access_token=${token}&refresh_token=${refreshToken || token}&type=${type}`;
             console.log('Opening:', deepLink);
             window.location = deepLink;
         } else {
