@@ -18,20 +18,18 @@
     <script>
     const searchParams = new URLSearchParams(window.location.search);
     const code = searchParams.get('code');
-    const type = searchParams.get('type'); // 'recovery' oder 'signup'
-
+    const flow = searchParams.get('flow');
+    
     if (code) {
         let deepLink;
-        if (type === 'recovery') {
+        if (flow === 'recovery') {
             deepLink = `ocrtesting://reset-password?code=${code}`;
-        } else if (type === 'signup') {
+        } else if (flow === 'signup') {
             deepLink = `ocrtesting://confirm-email?code=${code}`;
         } else {
-            document.body.innerHTML = '<h1>Unknown type: ' + type + '</h1>';
-            throw new Error('Unknown type');
+            document.body.innerHTML = '<h1>Unknown flow: ' + flow + '</h1>';
+            throw new Error('Unknown flow');
         }
-
-        console.log('Opening:', deepLink);
         window.location = deepLink;
     } else {
         document.body.innerHTML = '<h1>No code found</h1><p>URL: ' + window.location.href + '</p>';
