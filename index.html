@@ -16,23 +16,30 @@
     <p>If the app doesn't open automatically, please open it manually.</p>
     
     <script>
-        const searchParams = new URLSearchParams(window.location.search);
-        const code = searchParams.get('code');
+    const searchParams = new URLSearchParams(window.location.search);
+    const code = searchParams.get('code');
+    const type = searchParams.get('type'); // 'recovery' oder 'signup'
 
-        console.log('Code:', code);
-
-        if (code) {
-            const deepLink = `ocrtesting://reset-password?code=${code}`;
-            console.log('Opening:', deepLink);
-            window.location = deepLink;
+    if (code) {
+        let deepLink;
+        if (type === 'recovery') {
+            deepLink = `ocrtesting://reset-password?code=${code}`;
+        } else if (type === 'signup') {
+            deepLink = `ocrtesting://confirm-email?code=${code}`;
         } else {
-            document.body.innerHTML = '<h1>No code found</h1><p>URL: ' + window.location.href + '</p>';
+            document.body.innerHTML = '<h1>Unknown type: ' + type + '</h1>';
+            throw new Error('Unknown type');
         }
 
-        // Fallback nach 3 Sekunden
-        setTimeout(() => {
-            document.body.innerHTML += '<br><p>Please open the app manually to complete password reset.</p>';
-        }, 3000);
-    </script>
+        console.log('Opening:', deepLink);
+        window.location = deepLink;
+    } else {
+        document.body.innerHTML = '<h1>No code found</h1><p>URL: ' + window.location.href + '</p>';
+    }
+
+    setTimeout(() => {
+        document.body.innerHTML += '<br><p>Please open the app manually.</p>';
+    }, 3000);
+</script>
 </body>
 </html>
